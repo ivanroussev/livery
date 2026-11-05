@@ -29,6 +29,11 @@ body::after {
   pointer-events: none;
 }
 
+/* Keeps slide-out panel buttons clear of the label in narrow windows. */
+#app .sliding-panel__wrapper {
+  padding-top: calc(var(--livery-env-bar-height) + 32px);
+}
+
 /* The outer shadow fills the corner wedges, so the frame has no gaps on
    rounded (macOS) or square windows. */
 #app::after {

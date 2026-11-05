@@ -1,4 +1,4 @@
-/*! livery 0.1.0 · argocd staging · https://github.com/ivanroussev/livery · Apache-2.0 */
+/*! livery 0.1.1 · argocd staging · https://github.com/ivanroussev/livery · Apache-2.0 */
 :root {
   --livery-env: #6d7f8b;
   --livery-env-ink: #ffffff;
@@ -39,6 +39,11 @@ body::after {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
   z-index: 10001;
   pointer-events: none;
+}
+
+/* Keeps slide-out panel buttons clear of the label in narrow windows. */
+#app .sliding-panel__wrapper {
+  padding-top: calc(var(--livery-env-bar-height) + 32px);
 }
 
 /* The outer shadow fills the corner wedges, so the frame has no gaps on

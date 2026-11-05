@@ -49,7 +49,7 @@ Point `ui.cssurl` at a pinned release:
 ```yaml
 # argocd-cm
 data:
-  ui.cssurl: "https://cdn.jsdelivr.net/gh/ivanroussev/livery@v0.1.0/argocd/livery-prod.css"
+  ui.cssurl: "https://cdn.jsdelivr.net/gh/ivanroussev/livery@v0.1.1/argocd/livery-prod.css"
 ```
 
 With the [argo-cd Helm chart](https://github.com/argoproj/argo-helm/tree/main/charts/argo-cd):
@@ -57,7 +57,7 @@ With the [argo-cd Helm chart](https://github.com/argoproj/argo-helm/tree/main/ch
 ```yaml
 configs:
   cm:
-    ui.cssurl: "https://cdn.jsdelivr.net/gh/ivanroussev/livery@v0.1.0/argocd/livery-prod.css"
+    ui.cssurl: "https://cdn.jsdelivr.net/gh/ivanroussev/livery@v0.1.1/argocd/livery-prod.css"
 ```
 
 Users' browsers fetch the file, so they need to reach the CDN. If your
@@ -117,7 +117,7 @@ label, e.g. `PROD · EU-WEST-1`. The bar label and the Sync warning both use
 it. Load livery first, then override the setting:
 
 ```css
-@import url("https://cdn.jsdelivr.net/gh/ivanroussev/livery@v0.1.0/argocd/livery-prod.css");
+@import url("https://cdn.jsdelivr.net/gh/ivanroussev/livery@v0.1.1/argocd/livery-prod.css");
 
 :root {
   --livery-env-label: "PROD · EU-WEST-1";
@@ -129,7 +129,7 @@ With Helm, put that inline in `configs.styles`:
 ```yaml
 configs:
   styles: |
-    @import url("https://cdn.jsdelivr.net/gh/ivanroussev/livery@v0.1.0/argocd/livery-prod.css");
+    @import url("https://cdn.jsdelivr.net/gh/ivanroussev/livery@v0.1.1/argocd/livery-prod.css");
     :root { --livery-env-label: "PROD · EU-WEST-1"; }
 ```
 
