@@ -1,0 +1,12 @@
+:root {
+  --livery-env: #4f8a3c;
+  --livery-env-ink: #fbf8f1;
+  --livery-env-text: #3d6e2e;
+  --livery-env-label: "DEVELOPMENT";
+}
+
+:root:has(.theme-dark) {
+  --livery-env: #86b96f;
+  --livery-env-ink: #0f1713;
+  --livery-env-text: #a3cc8e;
+}

@@ -1,0 +1,14 @@
+:root {
+  --livery-env: #a8382a;
+  --livery-env-ink: #fbf8f1;
+  --livery-env-text: #8f2f22;
+  --livery-env-label: "PRODUCTION";
+  --livery-env-bar-height: 5px;
+  --livery-env-bar: repeating-linear-gradient(135deg, #a8382a 0 12px, #7e2a20 12px 24px);
+}
+
+:root:has(.theme-dark) {
+  --livery-env: #c4513f;
+  --livery-env-text: #e8907d;
+  --livery-env-bar: repeating-linear-gradient(135deg, #c4513f 0 12px, #8e3528 12px 24px);
+}

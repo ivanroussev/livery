@@ -1,0 +1,102 @@
+/*! livery 0.1.0 · argocd dev · https://github.com/ivanroussev/livery · Apache-2.0 */
+:root {
+  --livery-env: #6d7f8b;
+  --livery-env-ink: #ffffff;
+  --livery-env-text: #495763;
+  --livery-env-label: "ENVIRONMENT";
+  --livery-env-bar: var(--livery-env);
+  --livery-env-bar-height: 4px;
+  --livery-env-frame: 3px;
+  --livery-env-frame-radius: 14px;
+  --livery-font: "Heebo", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+/* Checked against Argo CD v3.6.1 and v2.13.0. Rules are scoped under #app
+   because Argo CD injects its own styles after this file. */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: var(--livery-env-bar-height);
+  background: var(--livery-env-bar);
+  z-index: 10001;
+  pointer-events: none;
+}
+
+body::after {
+  content: var(--livery-env-label);
+  position: fixed;
+  top: var(--livery-env-bar-height);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 14px 4px;
+  border-radius: 0 0 8px 8px;
+  background: var(--livery-env);
+  color: var(--livery-env-ink);
+  font: 700 11px/1.4 var(--livery-font);
+  letter-spacing: 0.18em;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  z-index: 10001;
+  pointer-events: none;
+}
+
+/* The outer shadow fills the corner wedges, so the frame has no gaps on
+   rounded (macOS) or square windows. */
+#app::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  border-radius: var(--livery-env-frame-radius);
+  box-shadow:
+    inset 0 0 0 var(--livery-env-frame) var(--livery-env),
+    0 0 0 var(--livery-env-frame-radius) var(--livery-env);
+  z-index: 10000;
+  pointer-events: none;
+}
+
+#app .sliding-panel:has(.application-sync-options) .sliding-panel__header .argo-button--base {
+  background-color: var(--livery-env);
+  color: var(--livery-env-ink);
+}
+#app .sliding-panel:has(.application-sync-options) .sliding-panel__header .argo-button--base:not([disabled]):hover {
+  background-color: var(--livery-env);
+  color: var(--livery-env-ink);
+  filter: brightness(1.08);
+}
+#app .sliding-panel:has(.application-sync-options) .sliding-panel__header::after {
+  content: "Syncing to " var(--livery-env-label);
+  position: absolute;
+  top: 50%;
+  right: 64px;
+  transform: translateY(-50%);
+  padding: 0 10px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--livery-env) 14%, transparent);
+  box-shadow: inset 0 0 0 1px var(--livery-env);
+  color: var(--livery-env-text);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 26px;
+  letter-spacing: 0.04em;
+}
+
+#app .popup-container:has(.popup-container__header__red) .popup-container__footer .argo-button--base {
+  background-color: var(--livery-env);
+  color: var(--livery-env-ink);
+}
+#app .popup-container:has(.popup-container__header__red) .argo-field:focus {
+  border-bottom-color: var(--livery-env);
+}
+:root {
+  --livery-env: #4f8a3c;
+  --livery-env-ink: #fbf8f1;
+  --livery-env-text: #3d6e2e;
+  --livery-env-label: "DEVELOPMENT";
+}
+
+:root:has(.theme-dark) {
+  --livery-env: #86b96f;
+  --livery-env-ink: #0f1713;
+  --livery-env-text: #a3cc8e;
+}

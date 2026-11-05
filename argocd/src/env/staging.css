@@ -1,0 +1,11 @@
+:root {
+  --livery-env: #b97a12;
+  --livery-env-ink: #1a1204;
+  --livery-env-text: #85570a;
+  --livery-env-label: "STAGING";
+}
+
+:root:has(.theme-dark) {
+  --livery-env: #d9a040;
+  --livery-env-text: #e8bb6c;
+}

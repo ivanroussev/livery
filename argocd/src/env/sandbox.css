@@ -1,0 +1,12 @@
+:root {
+  --livery-env: #3a5bc7;
+  --livery-env-ink: #f7f8fc;
+  --livery-env-text: #2f4aa3;
+  --livery-env-label: "SANDBOX";
+}
+
+:root:has(.theme-dark) {
+  --livery-env: #7d97ec;
+  --livery-env-ink: #0e1430;
+  --livery-env-text: #a3b6f2;
+}

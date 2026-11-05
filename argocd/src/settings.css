@@ -1,0 +1,11 @@
+:root {
+  --livery-env: #6d7f8b;
+  --livery-env-ink: #ffffff;
+  --livery-env-text: #495763;
+  --livery-env-label: "ENVIRONMENT";
+  --livery-env-bar: var(--livery-env);
+  --livery-env-bar-height: 4px;
+  --livery-env-frame: 3px;
+  --livery-env-frame-radius: 14px;
+  --livery-font: "Heebo", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
