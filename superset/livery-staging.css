@@ -1,0 +1,124 @@
+/*! livery 0.2.0 · superset staging · https://github.com/ivanroussev/livery · Apache-2.0 */
+:root {
+  --livery-env: #6d7f8b;
+  --livery-env-ink: #ffffff;
+  --livery-env-text: #495763;
+  --livery-env-label: "ENVIRONMENT";
+  --livery-env-bar: var(--livery-env);
+  --livery-env-bar-height: 4px;
+  --livery-env-frame: 3px;
+  --livery-env-frame-radius: 14px;
+  --livery-font: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+/* Checked against Apache Superset 6.1.0. Superset injects its own styles
+   after this file, so rules are scoped under body and use the stable
+   data-test attributes and superset-button-* classes, never the hashed
+   ones. */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: var(--livery-env-bar-height);
+  background: var(--livery-env-bar);
+  z-index: 10001;
+  pointer-events: none;
+}
+
+body::after {
+  content: var(--livery-env-label);
+  position: fixed;
+  top: var(--livery-env-bar-height);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 14px 4px;
+  border-radius: 0 0 8px 8px;
+  background: var(--livery-env);
+  color: var(--livery-env-ink);
+  font: 700 11px/1.4 var(--livery-font);
+  letter-spacing: 0.18em;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  z-index: 10001;
+  pointer-events: none;
+}
+
+/* The outer shadow fills the corner wedges, so the frame has no gaps on
+   rounded (macOS) or square windows. */
+#app::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  border-radius: var(--livery-env-frame-radius);
+  box-shadow:
+    inset 0 0 0 var(--livery-env-frame) var(--livery-env),
+    0 0 0 var(--livery-env-frame-radius) var(--livery-env);
+  z-index: 10000;
+  pointer-events: none;
+}
+
+/* SQL Lab: Run takes the environment colour and says where it runs. */
+body .ant-btn[data-test="run-query-action"]:not(:disabled) {
+  background: var(--livery-env);
+  border-color: var(--livery-env);
+  color: var(--livery-env-ink);
+}
+body .ant-btn[data-test="run-query-action"]:not(:disabled):hover,
+body .ant-btn[data-test="run-query-action"]:not(:disabled):focus-visible {
+  background: var(--livery-env);
+  border-color: var(--livery-env);
+  color: var(--livery-env-ink);
+  filter: brightness(1.08);
+}
+body :has(> .ant-btn[data-test="run-query-action"])::after {
+  content: "Runs on " var(--livery-env-label);
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 8px;
+  padding: 0 10px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--livery-env) 14%, transparent);
+  box-shadow: inset 0 0 0 1px var(--livery-env);
+  color: var(--livery-env-text);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 26px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* Delete, overwrite and other confirmations Superset marks as dangerous. */
+body .ant-btn.superset-button-danger:not(:disabled),
+body .ant-btn.ant-btn-dangerous.ant-btn-variant-solid:not(:disabled) {
+  background: var(--livery-env);
+  border-color: var(--livery-env);
+  color: var(--livery-env-ink);
+}
+body .ant-btn.superset-button-danger:not(:disabled):hover,
+body .ant-btn.ant-btn-dangerous.ant-btn-variant-solid:not(:disabled):hover {
+  background: var(--livery-env);
+  border-color: var(--livery-env);
+  color: var(--livery-env-ink);
+  filter: brightness(1.08);
+}
+body .ant-input.ant-input-outlined[data-test="delete-modal-input"]:focus,
+body .ant-input.ant-input-outlined[data-test="delete-modal-input"]:hover {
+  border-color: var(--livery-env);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--livery-env) 18%, transparent);
+}
+:root {
+  --livery-env: #b97a12;
+  --livery-env-ink: #1a1204;
+  --livery-env-text: #85570a;
+  --livery-env-label: "STAGING";
+}
+
+/* Superset sets color-scheme on <html> when the theme changes, so
+   light-dark() follows its light and dark themes. */
+@supports (color: light-dark(#000, #fff)) {
+  :root {
+    --livery-env: light-dark(#b97a12, #d9a040);
+    --livery-env-ink: light-dark(#1a1204, #1a1204);
+    --livery-env-text: light-dark(#85570a, #e8bb6c);
+  }
+}

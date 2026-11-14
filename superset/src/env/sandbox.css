@@ -1,0 +1,16 @@
+:root {
+  --livery-env: #3a5bc7;
+  --livery-env-ink: #f7f8fc;
+  --livery-env-text: #2f4aa3;
+  --livery-env-label: "SANDBOX";
+}
+
+/* Superset sets color-scheme on <html> when the theme changes, so
+   light-dark() follows its light and dark themes. */
+@supports (color: light-dark(#000, #fff)) {
+  :root {
+    --livery-env: light-dark(#3a5bc7, #7d97ec);
+    --livery-env-ink: light-dark(#f7f8fc, #0e1430);
+    --livery-env-text: light-dark(#2f4aa3, #a3b6f2);
+  }
+}

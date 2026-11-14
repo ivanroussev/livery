@@ -4,11 +4,12 @@ https://github.com/user-attachments/assets/9a754889-0a2f-4781-880b-e6a8dd7e1ee6
 
 # livery
 
-**Environment signals for Argo CD.** Know where you are before you press Sync.
+**Environment signals for Argo CD, Apache Superset, Gitea and Forgejo.** Know where you
+are before you press Sync.
 
 Every Argo CD looks the same, so production and a dev sandbox are one
-browser tab apart and look identical. livery keeps Argo CD's own look and
-adds signals that are hard to miss:
+browser tab apart and look identical. livery keeps the app's own look and
+adds signals that are hard to miss. In Argo CD:
 
 - **Top bar and label:** a coloured bar across the top of every page, with
   the environment name hanging from it. Prod gets a hatched bar.
@@ -18,13 +19,20 @@ adds signals that are hard to miss:
 - **Delete warning:** the OK button in Delete dialogs takes the environment
   colour. In prod, every Delete button is outlined in red as well.
 
-Plain CSS: no build step on your side, no Argo CD fork.
+[Superset](#apache-superset) gets the same bar, label and frame, with the
+warnings on SQL Lab's Run button and on Delete.
+[Gitea and Forgejo](#gitea-and-forgejo) get them with the warnings on the
+Danger Zone and its dialogs.
+
+Plain CSS: no build step on your side, no fork of the app.
 
 ## Supported apps
 
 | App | Folder |
 |---|---|
 | Argo CD | [`argocd/`](argocd/) |
+| Apache Superset | [`superset/`](superset/) |
+| Gitea, Forgejo | [`gitea/`](gitea/) |
 
 ## Argo CD
 
@@ -176,6 +184,195 @@ The files in `argocd/` are built from `argocd/src/`:
 `src/settings.css` holds every setting and its default, `src/argocd.css`
 maps them onto Argo CD's UI (`src/argocd-prod.css` adds the prod-only
 Delete buttons), and `src/env/` sets the colours and label per environment.
+
+## Apache Superset
+
+- **Top bar, label and window frame:** the same as in Argo CD.
+- **Run warning:** SQL Lab's Run button takes the environment colour, with
+  *Runs on PRODUCTION* next to it.
+- **Delete warning:** the Delete button in confirmation dialogs takes the
+  environment colour. In prod, the Delete action in every list is outlined
+  in red as well.
+
+### Files
+
+| File | Colour | Label |
+|---|---|---|
+| `superset/livery-prod.css` | Red, hatched bar | `PRODUCTION` |
+| `superset/livery-staging.css` | Amber | `STAGING` |
+| `superset/livery-dev.css` | Green | `DEVELOPMENT` |
+| `superset/livery-sandbox.css` | Blue | `SANDBOX` |
+
+### Install
+
+Superset has no setting for a custom stylesheet. It does include a
+template, `head_custom_extra.html`, in the `<head>` of every page, and
+ships it empty with a note that it "may be overridden in your custom
+deployment". livery uses that: you replace the template with one line
+that loads the stylesheet. Restart Superset afterwards.
+
+#### Self-hosted
+
+Save this as `head_custom_extra.html`:
+
+```html
+<link rel="stylesheet" href="{{ assets_prefix }}/static/assets/livery-prod.css?v=0.2.0">
+```
+
+Mount it over the empty template, and the stylesheet into Superset's
+static folder. With the official image:
+
+```bash
+docker run -d -p 8088:8088 \
+  -v ./head_custom_extra.html:/app/superset/templates/head_custom_extra.html:ro \
+  -v ./superset/livery-prod.css:/app/superset/static/assets/livery-prod.css:ro \
+  apache/superset:6.1.0
+```
+
+On Kubernetes, put both files in a ConfigMap and mount each with
+`subPath` at the same two paths, in every Superset web pod.
+
+Superset tells browsers to cache static files for a year. Change the
+`?v=` value whenever you change the file.
+
+#### Hosted
+
+Point the template at a pinned release:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ivanroussev/livery@v0.2.0/superset/livery-prod.css">
+```
+
+Superset's default `Content-Security-Policy` only allows its own
+stylesheets, so allow the CDN in `superset_config.py`:
+
+```python
+from superset.config import TALISMAN_CONFIG
+
+TALISMAN_CONFIG["content_security_policy"]["style-src"].append("https://cdn.jsdelivr.net")
+```
+
+### Custom labels
+
+Add a `<style>` after the link in `head_custom_extra.html`:
+
+```html
+<link rel="stylesheet" href="{{ assets_prefix }}/static/assets/livery-prod.css?v=0.2.0">
+<style>
+  :root { --livery-env-label: "PROD · EU-WEST-1"; }
+</style>
+```
+
+The settings are the same as [Argo CD's](#custom-labels), with one
+difference: for both themes, set a colour as
+`light-dark(<light>, <dark>)` instead of adding a dark-mode rule.
+
+### Compatibility
+
+Tested on Superset **6.1.0**, in its light and dark themes.
+
+The bar, label and frame don't depend on Superset's class names. The Run
+and Delete signals use Superset's `data-test` attributes and Ant Design
+class names; if a future version renames them, that signal stops showing
+and nothing else breaks. They need CSS `:has()`. The dark-theme colours
+need `light-dark()` (Chrome or Edge 123+, Safari 17.5+, Firefox 120+);
+older browsers show the light-theme colours in both themes.
+
+Embedded dashboards load the same template, so they get the bar and frame
+too.
+
+### Building
+
+```bash
+./superset/build.sh
+```
+
+The layout of `superset/src/` matches `argocd/src/`.
+
+## Gitea and Forgejo
+
+One set of files covers both.
+
+- **Top bar, label and window frame:** the same as in Argo CD.
+- **Danger Zone:** its header names the environment and its buttons are
+  outlined in the environment colour. In prod, the header carries the
+  hatched bar.
+- **Delete, Transfer and Archive dialogs:** the title names the
+  environment and the confirm button takes its colour, as do the other red
+  buttons.
+
+### Files
+
+| File | Colour | Label |
+|---|---|---|
+| `gitea/livery-prod.css` | Red, hatched bar | `PRODUCTION` |
+| `gitea/livery-staging.css` | Amber | `STAGING` |
+| `gitea/livery-dev.css` | Green | `DEVELOPMENT` |
+| `gitea/livery-sandbox.css` | Blue | `SANDBOX` |
+
+### Install
+
+Both apps load `templates/custom/header.tmpl` from the custom directory
+into the `<head>` of every page, and serve files under `public/assets/`
+([Gitea docs](https://docs.gitea.com/administration/customizing-gitea),
+[Forgejo docs](https://forgejo.org/docs/latest/contributor/customization/)).
+The custom directory is `/data/gitea` in both official Docker images.
+
+Copy the stylesheet to `public/assets/css/` in the custom directory, and
+save this as `templates/custom/header.tmpl`:
+
+```html
+<link rel="stylesheet" href="{{AssetUrlPrefix}}/css/livery-prod.css">
+```
+
+With Docker:
+
+```bash
+docker run -d -p 3000:3000 \
+  -v ./header.tmpl:/data/gitea/templates/custom/header.tmpl:ro \
+  -v ./gitea/livery-prod.css:/data/gitea/public/assets/css/livery-prod.css:ro \
+  docker.gitea.com/gitea:latest
+```
+
+Restart after adding or changing the template. Browsers cache the
+stylesheet for six hours.
+
+To load a pinned release instead, point the link at
+`https://cdn.jsdelivr.net/gh/ivanroussev/livery@v0.2.0/gitea/livery-prod.css`.
+
+### Custom labels
+
+Add a `<style>` after the link in `header.tmpl`:
+
+```html
+<link rel="stylesheet" href="{{AssetUrlPrefix}}/css/livery-prod.css">
+<style>
+  :root { --livery-env-label: "PROD · EU-WEST-1"; }
+</style>
+```
+
+The settings are the same as [Argo CD's](#custom-labels). As with
+Superset, set a colour for both themes as `light-dark(<light>, <dark>)`.
+
+### Compatibility
+
+Tested on Gitea **28.3.0** and Forgejo **15.0.11**, in their light, dark
+and auto themes.
+
+The bar, label and frame don't depend on either app's class names. The
+Danger Zone and dialog signals do, and need CSS `:has()`; if a future
+version renames those classes, that signal stops showing and nothing else
+breaks. The dark-theme colours need `light-dark()` (Chrome or Edge 123+,
+Safari 17.5+, Firefox 120+).
+
+Forgejo's own accent colour is a burnt orange, close to the prod red. The
+label and hatching still tell them apart.
+
+### Building
+
+```bash
+./gitea/build.sh
+```
 
 ## License
 

@@ -1,0 +1,16 @@
+:root {
+  --livery-env: #b97a12;
+  --livery-env-ink: #1a1204;
+  --livery-env-text: #85570a;
+  --livery-env-label: "STAGING";
+}
+
+/* Superset sets color-scheme on <html> when the theme changes, so
+   light-dark() follows its light and dark themes. */
+@supports (color: light-dark(#000, #fff)) {
+  :root {
+    --livery-env: light-dark(#b97a12, #d9a040);
+    --livery-env-ink: light-dark(#1a1204, #1a1204);
+    --livery-env-text: light-dark(#85570a, #e8bb6c);
+  }
+}

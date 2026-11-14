@@ -1,0 +1,101 @@
+/* Checked against Gitea 28.3.0 and Forgejo 15.0.11. The bar, label and
+   frame use no app selectors. The warnings use the Fomantic-style class
+   names both apps share. */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: var(--livery-env-bar-height);
+  background: var(--livery-env-bar);
+  z-index: 10001;
+  pointer-events: none;
+}
+
+body::after {
+  content: var(--livery-env-label);
+  position: fixed;
+  top: var(--livery-env-bar-height);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 14px 4px;
+  border-radius: 0 0 8px 8px;
+  background: var(--livery-env);
+  color: var(--livery-env-ink);
+  font: 700 11px/1.4 var(--livery-font);
+  letter-spacing: 0.18em;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  z-index: 10001;
+  pointer-events: none;
+}
+
+/* The outer shadow fills the corner wedges, so the frame has no gaps on
+   rounded (macOS) or square windows. */
+html::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  border-radius: var(--livery-env-frame-radius);
+  box-shadow:
+    inset 0 0 0 var(--livery-env-frame) var(--livery-env),
+    0 0 0 var(--livery-env-frame-radius) var(--livery-env);
+  z-index: 10000;
+  pointer-events: none;
+}
+
+/* Solid destructive buttons: the confirm button in Delete, Transfer and
+   Archive dialogs, and the other red buttons. */
+html body .ui.red.button:not(.basic),
+html body .ui.danger.button:not(.basic) {
+  background: var(--livery-env);
+  border-color: var(--livery-env);
+  color: var(--livery-env-ink);
+}
+html body .ui.red.button:not(.basic):hover,
+html body .ui.danger.button:not(.basic):hover {
+  background: var(--livery-env);
+  border-color: var(--livery-env);
+  color: var(--livery-env-ink);
+  filter: brightness(1.08);
+}
+
+/* Outlined ones: the Danger Zone buttons that open those dialogs. */
+html body .ui.basic.red.button,
+html body .danger.button:not(.ui) {
+  background: transparent;
+  border-color: var(--livery-env);
+  color: var(--livery-env-text);
+  box-shadow: inset 0 0 0 1px var(--livery-env);
+}
+html body .ui.basic.red.button:hover,
+html body .danger.button:not(.ui):hover {
+  background: var(--livery-env);
+  border-color: var(--livery-env);
+  color: var(--livery-env-ink);
+}
+
+/* Danger Zone and destructive dialogs say which environment they act on. */
+html body .ui.error.header:has(+ .danger.segment)::after,
+html body .ui.modal:has(.actions .red.button, .actions .danger.button) > .header::after {
+  content: var(--livery-env-label);
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 10px;
+  padding: 0 8px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--livery-env) 14%, transparent);
+  box-shadow: inset 0 0 0 1px var(--livery-env);
+  color: var(--livery-env-text);
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 20px;
+  letter-spacing: 0.08em;
+}
+html body .ui.error.header:has(+ .danger.segment),
+html body .ui.error.header + .danger.segment {
+  border-color: var(--livery-env);
+}
+html body .ui.modal:has(.actions .red.button, .actions .danger.button) input:focus {
+  border-color: var(--livery-env);
+}
