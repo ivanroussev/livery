@@ -1,0 +1,16 @@
+:root {
+  --livery-env: #4f8a3c;
+  --livery-env-ink: #fbf8f1;
+  --livery-env-text: #3d6e2e;
+  --livery-env-label: "DEVELOPMENT";
+}
+
+/* Superset sets color-scheme on <html> when the theme changes, so
+   light-dark() follows its light and dark themes. */
+@supports (color: light-dark(#000, #fff)) {
+  :root {
+    --livery-env: light-dark(#4f8a3c, #86b96f);
+    --livery-env-ink: light-dark(#fbf8f1, #0f1713);
+    --livery-env-text: light-dark(#3d6e2e, #a3cc8e);
+  }
+}

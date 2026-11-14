@@ -1,0 +1,8 @@
+/* Prod only: the Danger Zone carries the hatched bar. */
+html body .ui.error.header:has(+ .danger.segment) {
+  border-top: var(--livery-env-bar-height) solid transparent;
+  background-image: var(--livery-env-bar);
+  background-size: 100% var(--livery-env-bar-height);
+  background-repeat: no-repeat;
+  background-origin: border-box;
+}

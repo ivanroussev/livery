@@ -1,0 +1,18 @@
+:root {
+  --livery-env: #a8382a;
+  --livery-env-ink: #fbf8f1;
+  --livery-env-text: #8f2f22;
+  --livery-env-label: "PRODUCTION";
+  --livery-env-shade: #7e2a20;
+  --livery-env-bar-height: 5px;
+  --livery-env-bar: repeating-linear-gradient(135deg, var(--livery-env) 0 12px, var(--livery-env-shade) 12px 24px);}
+
+/* Gitea and Forgejo themes set color-scheme, so
+   light-dark() follows light, dark and auto themes. */
+@supports (color: light-dark(#000, #fff)) {
+  :root {
+    --livery-env: light-dark(#a8382a, #c4513f);
+    --livery-env-ink: light-dark(#fbf8f1, #fbf8f1);
+    --livery-env-text: light-dark(#8f2f22, #e8907d);
+    --livery-env-shade: light-dark(#7e2a20, #8e3528);  }
+}
